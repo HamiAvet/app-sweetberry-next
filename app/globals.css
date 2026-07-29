@@ -1,3 +1,6 @@
+@import "tailwindcss";
+
+/* Default styles for light and dark mode
 :root {
   --background: #ffffff;
   --foreground: #171717;
@@ -47,3 +50,4 @@ a {
     color-scheme: dark;
   }
 }
+*/
