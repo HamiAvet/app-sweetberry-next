@@ -1,9 +1,9 @@
 "use client";
 
-import { FormEvent } from "react";
+import React from "react";
 
 export default function Home() {
-  const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
+  const handleSubmit: React.SubmitEventHandler<HTMLFormElement> = async (event) => {
     event.preventDefault();
     const formData = new FormData(event.currentTarget);
     const data = Object.fromEntries(formData.entries());
