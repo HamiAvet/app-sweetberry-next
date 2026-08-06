@@ -1,5 +1,12 @@
 @import "tailwindcss";
 
+
+@theme inline {
+  --font-inter: var(--font-inter);
+  --font-cormorant-garamond: var(--font-cormorant-garamond);
+  --font-dm-serif-display: var(--font-dm-serif-display);
+}
+
 /* Default styles for light and dark mode
 :root {
   --background: #ffffff;

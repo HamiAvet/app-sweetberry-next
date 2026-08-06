@@ -2,6 +2,8 @@
 
 import React from "react";
 
+import Navbar from "./ui/navbar";
+
 export default function Home() {
   const handleSubmit: React.SubmitEventHandler<HTMLFormElement> = async (event) => {
     event.preventDefault();
@@ -18,8 +20,10 @@ export default function Home() {
     console.log("data", data);
   };
   return (
-    <main className="flex flex-col min-h-screen items-center justify-center bg-[#d15c5c]">
-        <h1 className="text-5xl font-bold text-blue-600">
+    <>
+      <Navbar />
+      <main className="flex flex-col min-h-screen items-center justify-center bg-[#d15c5c]">
+        <h1 className="text-5xl font-bold text-blue-600 font-cormorant-garamond">
             Work in progress !
         </h1>
         <form onSubmit={handleSubmit} className="mt-4 flex flex-col items-center gap-2">
@@ -29,6 +33,7 @@ export default function Home() {
                 
             </p>
         </form>
-    </main>
+      </main>
+    </>
   );
 }
