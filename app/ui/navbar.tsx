@@ -2,6 +2,40 @@
 
 import Link from "next/link";
 import Image from "next/image";
+import { useState } from "react";
+
+function NavbarLink({ href, children }: { href: string, children: React.ReactNode }) {
+    const [hovered, setHovered] = useState(false);
+
+    return (
+        <li
+            onMouseEnter={() => setHovered(true)}
+            onMouseLeave={() => setHovered(false)}
+            
+            className="relative cursor-pointer"
+        >
+            <Link href={href}>{children}</Link>
+            <span
+                style={{
+                    transform: hovered ? "scaleX(1)" : "scaleX(0)"
+                }}
+                className="
+                    absolute
+                    -bottom-1
+                    left-0
+                    right-0
+                    h-1
+                    origin-left
+                    rounded-full
+                    bg-[#DE5260]
+                    transition-transform
+                    duration-300
+                    ease-in-out
+                    "
+            ></span>
+        </li>
+    );
+}
 
 export default function Navbar() {
     return <>
@@ -27,54 +61,21 @@ export default function Navbar() {
                     </h1>
                 </a>
 
-                <ul className="
-                    flex
-                    flex-row
-                    items-center 
-                    space-x-4
-                    gap-8
-                    text-[#0B0001]
-                    font-cormorant-garamond
-                    font-medium
-                    text-lg">
-                    <li className="
-                        decoration-none
-                        h-8
+                <ul 
+                    className="
                         flex
-                        flex-col
-                        justify-space-between
-                        items-center">
-                        <Link href="/">Home</Link>
-                        <div className="
-                            w-full
-                            h-0.5
-                            bg-[#DE5260]
-                            ">
-                                
-                        </div>
-                    </li>
-                    <li className="
-                        decoration-none
-                        h-8
-                        flex
-                        flex-col
-                        justify-space-between
-                        items-center">
-                        <Link href="">Products</Link>
-                    </li>
-                    <li className="
-                        decoration-none
-                        flex
-                        flex-col
-                        items-center
-                        justify-start
-                        gap-2">
-                        <Link href="">About</Link>
-                    </li>
-                    <li className="
-                        decoration-none">
-                        <Link href="">Contact</Link>
-                    </li>
+                        flex-row
+                        items-center 
+                        space-x-4
+                        gap-8
+                        text-[#0B0001]
+                        font-cormorant-garamond
+                        font-medium
+                        text-lg">
+                    <NavbarLink href="#">Home</NavbarLink>
+                    <NavbarLink href="#">Products</NavbarLink>
+                    <NavbarLink href="#">About</NavbarLink>
+                    <NavbarLink href="#">Contact</NavbarLink>
                 </ul>
 
                 <button className="
