@@ -20,7 +20,7 @@ function NavbarLink({ href, children }: { href: string, children: React.ReactNod
 
     // Render the link with hover effect
     return (
-        <li className="relative cursor-pointer text-xl" onMouseEnter={() => setHovered(true)} onMouseLeave={() => setHovered(false)}>
+        <li className="relative cursor-pointer lmd:text-xl text-4xl" onMouseEnter={() => setHovered(true)} onMouseLeave={() => setHovered(false)}>
             <Link href={href}>{children}</Link>
             <span className="absolute -bottom-1 left-0 right-0 h-1 origin-left rounded-full bg-[#DE5260] transition-transform duration-300 ease-in-out" style={{ transform: hovered ? "scaleX(1)" : "scaleX(0)"}}></span>
         </li>
@@ -42,17 +42,17 @@ export default function Navbar() {
 
     // Render the navigation bar
     return <>
-        <nav className="absolute w-full bg-[#FBE5E4] px-4 py-6 border-b border-[#e9bbbbc6] z-10">
-            <div className="flex justify-around items-center">
+        <nav className="absolute w-full bg-[#FBE5E4] border-b border-[#e9bbbbc6] z-10">
+            <div className="relative flex justify-between items-center px-4 py-6">
                 <a href="/" className="flex flex-row items-center space-x-2 gap-2">
                     <Image src="/images/sweetberry-logo.png" alt="Sweetberry" width={40} height={40} />
-                    <h1 className="text-3xl text-[#0B0001] font-cormorant-garamond lg:block md:hidden sm:block hidden">
+                    <h1 className="text-3xl text-[#0B0001] font-cormorant-garamond lmd:block hidden">
                         SWEETBERRY
                     </h1>
                 </a>
 
-                <div className={`md:static absolute bg-[#FBE5E4] border-b md:border-0 border-[#e9bbbbc6] md:min-h-fit min-h-[22vh] left-0 top-[${isMenuOpen ? "9vh" : "-100vh"}] h-auto w-full md:w-auto flex flex-col gap-8 transition-top md:transition-none duration-300 ease-in-out`}>
-                    <ul className="flex flex-col md:flex-row items-center gap-8 text-[#0B0001] font-cormorant-garamond font-medium text-lg">
+                <div className={`absolute lmd:static flex items-center justify-center lmd:w-auto w-full lmd:h-auto  left-0 top-23 overflow-hidden bg-[#FBE5E4] lmd:bg-transparent transition-all duration-300 ease-in-out ${isMenuOpen ? "h-[calc(100vh-5.75rem)]" : "h-0"}`}>
+                    <ul className="flex flex-col lmd:flex-row items-center justify-around gap-8 lmd:min-h-0 w-full lmd:w-auto text-[#0B0001] font-cormorant-garamond font-medium text-lg">
                         <NavbarLink href="#">{
                             language === "fr" ? "Accueil" : 
                             language === "es" ? "Inicio" :
@@ -98,9 +98,9 @@ export default function Navbar() {
                     }</Link>
 
                     {isMenuOpen ? (
-                        <X className="md:hidden cursor-pointer text-[#DE5260]" size={30} strokeWidth={1.5} onClick={() => handleMenuToggle()} />
+                        <X className="lmd:hidden cursor-pointer text-[#DE5260]" size={30} strokeWidth={1.5} onClick={() => handleMenuToggle()} />
                     ) : (
-                        <Menu className="md:hidden cursor-pointer text-[#DE5260]" size={30} strokeWidth={1.5} onClick={() => handleMenuToggle()} />
+                        <Menu className="lmd:hidden cursor-pointer text-[#DE5260]" size={30} strokeWidth={1.5} onClick={() => handleMenuToggle()} />
                     )}
                 </div>
             </div>

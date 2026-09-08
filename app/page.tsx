@@ -15,20 +15,20 @@ export default function Home() {
     <>
       <Navbar />
       <main className="flex flex-col min-h-screen items-center justify-start bg-[#FCE9EA]">
-        <header className="flex flex-row items-center justify-center gap-8 w-full">
-          <div className="flex flex-col items-center justify-center gap-4 w-1/2 px-4 py-8 h-screen">
+        <header className="flex flex-col items-center justify-center gap-8 w-full md:flex-row">
+          <div className="flex flex-col items-center justify-center gap-4 w-full xs:w-1/2 px-4 md:pt-8 pt-24 md:h-screen h-1/2">
             <div className="flex flex-col items-center justify-center gap-8 px-4 py-8 pt-18">
               <div className="relative align-middle text-center">
-              <h3 className="text-lg font-bold mb-4 font-dm-serif-display text-[#D64C5A] tracking-widest xl:text-xl">
+              <h3 className="text-sm xs:text-lg xl:text-xl font-bold mb-4 font-dm-serif-display text-[#D64C5A] tracking-widest">
                 PREMIUM HANDMADE
               </h3>
               <span className="absolute left-0 right-0 h-0.5 origin-center scale-x-35 rounded-full bg-[#DE5260]"></span>
             </div>
             <div className="relative align-middle text-center">
-              <h1 className="text-6xl font-medium mb-8 font-cormorant-garamond text-[#0B0001] xl:text-8xl">SWEETBERRY</h1>
+              <h1 className="text-5xl xs:text-6xl xl:text-8xl font-medium mb-8 font-cormorant-garamond text-[#0B0001]">SWEETBERRY</h1>
               <span className="absolute left-0 right-0 h-0.5 origin-center scale-x-50 rounded-full bg-[#DE5260]"></span>
             </div>
-            <p className="text-center font-light text-lg font-inter text-[#0B0001] max-w-lg my-4 xl:text-xl">
+            <p className="text-base xs:text-lg xl:text-xl text-center font-light font-inter text-[#0B0001] max-w-lg my-4">
               {language === "fr" ? "Redécouvrez la fraise avec nos chefs-d'œuvre chocolatés. Délicieux, élégants et faits avec amour. Parfaits pour rendre vos moments les plus doux inoubliables." :
               language === "es" ? "Redescubre la fresa con nuestras obras maestras de chocolate. Delicioso, elegante y hecho con amor. Perfecto para hacer que tus momentos más dulces sean inolvidables." :
               language === "de" ? "Entdecken Sie die Erdbeere mit unseren Schokoladenmeisterwerken neu. Köstlich, elegant und mit Liebe gemacht. Perfekt, um Ihre süßesten Momente unvergesslich zu machen." :
@@ -41,7 +41,7 @@ export default function Home() {
               <ChevronDown className="text-[#0B0001]" size={20} strokeWidth={0.75} />
             </button>
           </div>
-          <div className="w-3/4 h-screen bg-[url(/images/background.png)] bg-cover bg-center">
+          <div className="md:w-3/4 md:h-screen w-full h-50 bg-[url(/images/background.png)] bg-cover bg-center">
             
           </div>
         </header>

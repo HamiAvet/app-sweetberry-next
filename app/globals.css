@@ -1,10 +1,15 @@
 @import "tailwindcss";
 
-
+/* Set up custom properties for fonts and breakpoints */
 @theme inline {
   --font-inter: var(--font-inter);
   --font-cormorant-garamond: var(--font-cormorant-garamond);
   --font-dm-serif-display: var(--font-dm-serif-display);
+}
+
+@theme {
+  --breakpoint-xs: 25rem;
+  --breakpoint-lmd: 53rem;
 }
 
 /* Default styles for light and dark mode
