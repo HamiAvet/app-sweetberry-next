@@ -10,9 +10,6 @@ import { useState } from "react";
 // Import custom hooks
 import useLanguage from "@/app/hooks/useLanguage";
 
-// Import icons from lucide-react
-import { Menu, X } from "lucide-react";
-
 // Navbar link component with hover effect
 function NavbarLink({ href, children }: { href: string, children: React.ReactNode }) {
     // State to track hover status
@@ -52,7 +49,7 @@ export default function Navbar() {
                 </a>
 
                 <div className={`absolute lmd:static flex items-center justify-center lmd:w-auto w-full lmd:h-auto  left-0 top-23 overflow-hidden bg-[#FBE5E4] lmd:bg-transparent transition-all duration-300 ease-in-out ${isMenuOpen ? "h-[calc(100vh-5.75rem)]" : "h-0"}`}>
-                    <ul className="flex flex-col lmd:flex-row items-center justify-around gap-8 lmd:min-h-0 w-full lmd:w-auto text-[#0B0001] font-cormorant-garamond font-medium text-lg">
+                    <ul className="flex flex-col lmd:flex-row items-center justify-around gap-8 lmd:min-h-0 min-h-[calc(100vh-7rem)] w-full lmd:w-auto text-[#0B0001] font-cormorant-garamond font-medium text-lg">
                         <NavbarLink href="#">{
                             language === "fr" ? "Accueil" : 
                             language === "es" ? "Inicio" :
@@ -97,68 +94,13 @@ export default function Navbar() {
                         "Login"
                     }</Link>
 
-                    {isMenuOpen ? (
-                        <X className="lmd:hidden cursor-pointer text-[#DE5260]" size={30} strokeWidth={1.5} onClick={() => handleMenuToggle()} />
-                    ) : (
-                        <Menu className="lmd:hidden cursor-pointer text-[#DE5260]" size={30} strokeWidth={1.5} onClick={() => handleMenuToggle()} />
-                    )}
+                    <button className="relative lmd:hidden cursor-pointer w-8 h-8" onClick={handleMenuToggle}>
+                        <div className={`absolute left-0 w-full h-0.5 bg-[#DE5260] transition-all duration-300 ease-in-out ${isMenuOpen ? "top-1/2 -translate-y-1/2 rotate-45" : "top-1"}`}></div>
+                        <div className={`absolute top-1/2 left-0 w-full h-0.5 bg-[#DE5260] -translate-y-1/2 transition-all duration-300 ease-in-out ${isMenuOpen ? "opacity-0" : "opacity-100"}`}></div>
+                        <div className={`absolute left-0 w-full h-0.5 bg-[#DE5260] transition-all duration-300 ease-in-out ${isMenuOpen ? "top-1/2 -translate-y-1/2 -rotate-45" : "bottom-1"}`}></div>
+                    </button>
                 </div>
             </div>
         </nav>
     </>
 }
-
-/*
-
-<div className="flex flex-row items-center justify-between mx-8">
-    
-    <div className="absolute flex flex-row items-center space-x-4 gap-8 w-full justify-end">
-        <ul className="text-[#0B0001] font-cormorant-garamond font-medium text-lg">
-        <NavbarLink href="#">{
-            language === "fr" ? "Accueil" : 
-            language === "es" ? "Inicio" :
-            language === "de" ? "Startseite" :
-            language === "ru" ? "Главная" : 
-            "Home"}
-        </NavbarLink>
-        <NavbarLink href="#">{
-            language === "fr" ? "Produits" : 
-            language === "es" ? "Productos" : 
-            language === "de" ? "Produkte" :
-            language === "ru" ? "Продукты" :
-            language === "it" ? "Prodotti" :
-            "Products"}
-        </NavbarLink>
-        <NavbarLink href="#">{
-            language === "fr" ? "À propos" : 
-            language === "es" ? "Acerca de" :
-            language === "de" ? "Über uns" :
-            language === "it" ? "Informazioni" :
-            language === "ru" ? "О нас" :
-            "About"}
-        </NavbarLink>
-        <NavbarLink href="#">{
-            language === "fr" ? "Contact" : 
-            language === "es" ? "Contacto" :
-            language === "de" ? "Kontakt" :
-            language === "it" ? "Contatto" :
-            language === "ru" ? "Контакт" :
-            "Contact"}
-        </NavbarLink>
-    </ul>
-
-        <div className="bg-[#DE5260] text-white font-bold px-10 py-2 rounded-4xl cursor-pointer transition duration-300 ease-in-out hover:bg-[#d73545]">
-            <Link href="/login" className="w-full text-center">{
-                language === "fr" ? "Connexion" :
-                language === "es" ? "Iniciar sesión" :
-                language === "de" ? "Anmelden" :
-                language === "it" ? "Accesso" :
-                language === "ru" ? "Войти" :
-                "Login"
-            }</Link>
-        </div>
-    </div>
-                
-</div>
-
-*/
