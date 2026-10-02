@@ -85,7 +85,7 @@ export default function Navbar() {
                     
                 </div>
                 <div className="flex flex-row items-center space-x-4 gap-2 justify-end">
-                    <Link href="/login" className="bg-[#DE5260] text-white font-bold px-10 py-2 rounded-4xl cursor-pointer transition duration-300 ease-in-out hover:bg-[#d73545]">{
+                    <Link href="/login" className="bg-[#DE5260] text-white font-bold px-10 py-2 rounded-xl cursor-pointer transition duration-300 ease-in-out hover:bg-[#d73545]">{
                         language === "fr" ? "Connexion" :
                         language === "es" ? "Iniciar sesión" :
                         language === "de" ? "Anmelden" :
