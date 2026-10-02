@@ -1,20 +1,34 @@
 "use client";
 
-import useLanguage from "@/app/hooks/useLanguage";
-import Navbar from "@/app/ui/navbar";
-import { UserRound, Lock, MoveRight, Eye, EyeClosed } from "lucide-react";
+// Import React hooks
 import { useState } from "react";
 
+// Import custom hooks
+import useLanguage from "@/app/hooks/useLanguage";
+
+// Import UI components
+import Navbar from "@/app/ui/navbar";
+
+// Import icons from lucide-react
+import { UserRound, Lock, MoveRight, Eye, EyeClosed } from "lucide-react";
+
+
+
+// Login page component
 export default function Login() {
+    // Get the current language from the custom hook
     const language = useLanguage();
 
+    // State for handling hover effects on links and buttons
     const [isLinkHovering, setIsLinkHovering] = useState(false);
     const [isButtonHovering, setIsButtonHovering] = useState(false);
 
+    // State for handling password visibility toggle
     const [isPasswordVisible, setIsPasswordVisible] = useState(false);
 
+    // Render the login page UI
     return (
-        <div className="">
+        <div>
             <Navbar />
             <main className="flex flex-col min-h-screen items-center justify-start bg-[#FCE9EA]">
                 <header className="flex flex-col items-center justify-center gap-8 w-full md:flex-row">
@@ -180,40 +194,6 @@ export default function Login() {
                 </div>
                 </header>
             </main>
-
-            {/*<h1 className="">Login</h1>
-            <form className="">
-                <div className="mb-4">
-                    <label className="" htmlFor="username">
-                        Username
-                    </label>
-                    <input
-                        className=""
-                        id="username"
-                        type="text"
-                        placeholder="Username"
-                    />
-                </div>
-                <div className="mb-6">
-                    <label className="" htmlFor="password">
-                        Password
-                    </label>
-                    <input
-                        className=""
-                        id="password"
-                        type="password"
-                        placeholder="******************"
-                    />
-                </div>
-                <div className="">
-                    <button
-                        className=""
-                        type="button"
-                    >
-                        Sign In
-                    </button>
-                </div>
-            </form>*/}
         </div>
     );
 }
