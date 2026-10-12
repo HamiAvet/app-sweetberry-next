@@ -5,17 +5,20 @@ import "./globals.css";
 const inter = Inter({
   variable: "--font-inter",
   subsets: ["latin"],
+  preload: false,
 });
 
 const cormorantGaramond = Cormorant_Garamond({
   variable: "--font-cormorant-garamond",
   subsets: ["latin"],
+  preload: false,
 });
 
 const dmSerifDisplay = DM_Serif_Display({
   variable: "--font-dm-serif-display",
   subsets: ["latin"],
   weight: "400",
+  preload: false,
 });
 
 export const metadata: Metadata = {

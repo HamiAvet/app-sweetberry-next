@@ -3,6 +3,9 @@
 // Import React hooks
 import { useState } from "react";
 
+// Import type definitions for registration errors
+import type { RegistrationErrors } from "@/app/type/errors";
+
 // Import custom hooks
 import useLanguage from "@/app/hooks/useLanguage";
 
@@ -11,7 +14,6 @@ import Navbar from "@/app/ui/navbar";
 
 // Import icons from lucide-react
 import { UserRound, Mail, Lock, MoveRight, Eye, EyeClosed } from "lucide-react";
-
 
 // Login page component
 export default function Login() {
@@ -30,6 +32,64 @@ export default function Login() {
 
     // State for handling confirm password visibility toggle
     const [isConfirmPasswordVisible, setIsConfirmPasswordVisible] = useState(false);
+
+    // State for handling registration errors
+    const [errors, setErrors] = useState<RegistrationErrors>({
+        usernameError: "",
+        emailError: "",
+        passwordError: "",
+        confirmPasswordError: "",
+        aggregateError: ""
+    });
+
+    // Handler for updating registration errors
+    const handleFormSubmit = async (event: React.SubmitEvent) => {
+        // Prevent the default form submission behavior
+        event.preventDefault();
+
+        // Clear previous errors before submitting the form
+        setErrors({
+            usernameError: "",
+            emailError: "",
+            passwordError: "",
+            confirmPasswordError: "",
+            aggregateError: ""
+        });
+        
+        try {
+            // Get the form data from the submitted form
+            const formData = new FormData(event.currentTarget as HTMLFormElement);
+
+            // Append the user's language preference to the form data
+            formData.append('language', language || 'en');
+
+            const data = Object.fromEntries(formData);
+
+            const JSONData = JSON.stringify(data);
+
+            const response = await fetch("/api/auth/register", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSONData
+            });
+
+            if (!response.ok) {
+                throw new Error("Failed to register");
+            }
+            // Handle successful registration (e.g., redirect to login page or show success message)
+            alert(language === "fr" ? "Inscription réussie !" :
+                  language === "es" ? "¡Registro exitoso!" :
+                  language === "de" ? "Erfolgreich registriert!" :
+                  language === "it" ? "Registrazione riuscita!" :
+                  language === "ru" ? "Регистрация прошла успешно!" :
+                  "Registration successful!");
+            
+        } catch (error) {
+            console.error("Error submitting form:", error);
+        }
+    };
 
     // Render the login page UI
     return (
@@ -67,7 +127,7 @@ export default function Login() {
                                 </p>
                             </div>
                             <div className="mt-8">
-                                <form className="space-y-6">
+                                <form className="space-y-6" onSubmit={handleFormSubmit}>
                                     <div className="mb-4">
                                         <label className="block text-sm font-medium text-gray-700">
                                             {language === "fr" ? "Nom d'utilisateur" :
@@ -78,7 +138,7 @@ export default function Login() {
                                             "Username"}
                                         </label>
                                         <div className="relative mt-1">
-                                        <UserRound
+                                            <UserRound
                                                 className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-text-gray-700"
                                                 size={18}
                                                 aria-hidden="true"
@@ -96,6 +156,9 @@ export default function Login() {
                                                 language === "ru" ? "Имя пользователя" :
                                                 "Username"}
                                                 className="bg-[#FEF5F5] block w-full rounded-lg border-2 border-[#D64C5A55] py-2 pl-10 pr-4 focus:border-[#d64c5aa1] focus:outline-none transition duration-200"
+                                            
+                                                /* Default value for testing purposes */
+                                                defaultValue="TestUser"
                                             />
                                         </div>
                                     </div>
@@ -127,6 +190,9 @@ export default function Login() {
                                                 language === "ru" ? "Электронная почта" :
                                                 "Email"}
                                                 className="bg-[#FEF5F5] block w-full rounded-lg border-2 border-[#D64C5A55] py-2 pl-10 pr-4 focus:border-[#d64c5aa1] focus:outline-none transition duration-200"
+                                            
+                                                /* Default value for testing purposes */
+                                                defaultValue="test@example.com"
                                             />
                                         </div>
                                     </div>
@@ -158,6 +224,9 @@ export default function Login() {
                                                 language === "ru" ? "Пароль" :
                                                 "Password"}
                                                 className="bg-[#FEF5F5] block w-full rounded-lg border-2 border-[#D64C5A55] py-2 pl-10 pr-4 focus:border-[#d64c5aa1] focus:outline-none transition duration-300 ease-in-out"
+                                            
+                                                /* Default value for testing purposes */
+                                                defaultValue="TestPassword"
                                             />
                                             {!isPasswordVisible ? (
                                                 <Eye
@@ -203,6 +272,9 @@ export default function Login() {
                                                 language === "ru" ? "Подтвердите пароль" :
                                                 "Confirm Password"}
                                                 className="bg-[#FEF5F5] block w-full rounded-lg border-2 border-[#D64C5A55] py-2 pl-10 pr-4 focus:border-[#d64c5aa1] focus:outline-none transition duration-300 ease-in-out"
+                                            
+                                                /* Default value for testing purposes */
+                                                defaultValue="TestPassword"
                                             />
                                             {!isConfirmPasswordVisible ? (
                                                 <Eye
@@ -222,8 +294,8 @@ export default function Login() {
                                         </div>
                                     </div>
                                     <div className="flex items-center justify-end mb-4">
-                                        <input type="checkbox" id="remember-me" name="remember-me" className="mr-2 h-4 w-4 accent-[#D64C5A] cursor-pointer focus:ring-2 focus:ring-[#D64C5A]/40" />
-                                        <label htmlFor="remember-me" className="text-sm font-medium text-gray-700">
+                                        <input type="checkbox" id="agreement" name="agreement" className="mr-2 h-4 w-4 accent-[#D64C5A] cursor-pointer focus:ring-2 focus:ring-[#D64C5A]/40" />
+                                        <label htmlFor="agreement" className="text-sm font-medium text-gray-700">
                                             {language === "fr" ? (
                                                 <span className="flex gap-1 text-sm">J'accepte les 
                                                     <div className="relative text-sm" onMouseEnter={() => setIsLink1Hovering(true)} onMouseLeave={() => setIsLink1Hovering(false)}>

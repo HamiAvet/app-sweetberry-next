@@ -42,13 +42,13 @@ export default function Navbar() {
         <nav className="absolute w-full bg-[#FBE5E4] border-b border-[#e9bbbbc6] z-10">
             <div className="relative flex justify-between items-center px-4 py-6">
                 <a href="/" className="flex flex-row items-center space-x-2 gap-2">
-                    <Image src="/images/sweetberry-logo.png" alt="Sweetberry" width={40} height={40} />
+                    <Image src="/images/sweetberry-logo.png" alt="Sweetberry" width={40} height={40} className="h-10 w-10" />
                     <h1 className="text-3xl text-[#0B0001] font-cormorant-garamond lmd:block hidden">
                         SWEETBERRY
                     </h1>
                 </a>
 
-                <div className={`absolute lmd:static flex items-center justify-center lmd:w-auto w-full lmd:h-auto  left-0 top-23 overflow-hidden bg-[#FBE5E4] lmd:bg-transparent transition-all duration-300 ease-in-out ${isMenuOpen ? "h-[calc(100vh-5.75rem)]" : "h-0"}`}>
+                <div className={`absolute lmd:static flex items-center justify-center lmd:w-auto w-full lmd:h-auto  left-0 top-23 lmd:overflow-visible overflow-hidden bg-[#FBE5E4] lmd:bg-transparent transition-all duration-300 ease-in-out ${isMenuOpen ? "h-[calc(100vh-5.75rem)]" : "h-0"}`}>
                     <ul className="flex flex-col lmd:flex-row items-center justify-around gap-8 lmd:min-h-0 min-h-[calc(100vh-7rem)] w-full lmd:w-auto text-[#0B0001] font-cormorant-garamond font-medium text-lg">
                         <NavbarLink href="#">{
                             language === "fr" ? "Accueil" : 
