@@ -1,7 +1,13 @@
+// Import type for metadata from Next.js
 import type { Metadata } from "next";
-import { Inter, Cormorant_Garamond, DM_Serif_Display } from "next/font/google";
-import "./globals.css";
 
+// Import custom fonts from Google Fonts via Next.js
+import { Inter, Cormorant_Garamond, DM_Serif_Display } from "next/font/google";
+
+// Import global CSS styles
+import "@/app/globals.css";
+
+// Initialize custom fonts for the application
 const inter = Inter({
   variable: "--font-inter",
   subsets: ["latin"],
@@ -21,16 +27,19 @@ const dmSerifDisplay = DM_Serif_Display({
   preload: false,
 });
 
+// Define metadata for the application
 export const metadata: Metadata = {
   title: "Sweetberry",
   description: "Delicious and healthy treats for every occasion. Indulge in our sweet and fruity delights, made with love and care.",
 };
 
+// Root layout component for the Sweetberry application
 export default function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  // Additional logic for the root layout can be added here
   return (
     <html lang="en" className={`${inter.variable} ${cormorantGaramond.variable} ${dmSerifDisplay.variable}`}>
       <body>{children}</body>

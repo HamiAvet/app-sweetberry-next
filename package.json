@@ -6,6 +6,7 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
+    "generate-key": "npx tsx app/cli/generateKey.tsx",
     "lint": "eslint"
   },
   "dependencies": {

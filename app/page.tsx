@@ -1,13 +1,20 @@
 "use client";
 
+// Import custom UI components
 import Navbar from "./ui/navbar";
+
+// Import icons from lucide-react
 import { ChevronDown } from "lucide-react";
 
+// Import custom hooks
 import useLanguage from "./hooks/useLanguage";
 
+// Home page component for the Sweetberry application
 export default function Home() {
+  // Get the current language from the custom hook
   const language = useLanguage();
   
+  // Additional logic for the home page can be added here
   return (
     <>
       <Navbar />

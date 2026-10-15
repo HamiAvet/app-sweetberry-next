@@ -15,8 +15,8 @@ import Navbar from "@/app/ui/navbar";
 // Import icons from lucide-react
 import { UserRound, Mail, Lock, MoveRight, Eye, EyeClosed } from "lucide-react";
 
-// Login page component
-export default function Login() {
+// Registration page component
+export default function Register() {
     // Get the current language from the custom hook
     const language = useLanguage();
 
@@ -25,6 +25,7 @@ export default function Login() {
     const [isLink2Hovering, setIsLink2Hovering] = useState(false);
     const [isLink3Hovering, setIsLink3Hovering] = useState(false);
 
+    // State for handling confirm password input
     const [isButtonHovering, setIsButtonHovering] = useState(false);
 
     // State for handling password visibility toggle
@@ -63,35 +64,51 @@ export default function Login() {
             // Append the user's language preference to the form data
             formData.append('language', language || 'en');
 
+            // Convert the form data to a plain object for easier handling
             const data = Object.fromEntries(formData);
+            console.log("Form data to be sent:", data);
 
+            // Convert the plain object to JSON for sending in the request body
             const JSONData = JSON.stringify(data);
 
+            // Send the registration request to the server with the JSON data
             const response = await fetch("/api/auth/register", {
+                // Specify the HTTP method for the registration request
                 method: "POST",
+                // Specify the headers for the registration request
                 headers: {
                     "Content-Type": "application/json"
                 },
+                // Specify the body of the registration request
                 body: JSONData
             });
 
-            if (!response.ok) {
-                throw new Error("Failed to register");
+            // Check the response status to determine if the registration was successful
+            if (response.status === 200) {
+                // Handle successful registration (e.g., redirect to login page or show success message)
+                alert(language === "fr" ? "Inscription réussie !" :
+                      language === "es" ? "¡Registro exitoso!" :
+                      language === "de" ? "Erfolgreich registriert!" :
+                      language === "it" ? "Registrazione riuscita!" :
+                      language === "ru" ? "Регистрация прошла успешно!" :
+                      "Registration successful!");
             }
-            // Handle successful registration (e.g., redirect to login page or show success message)
-            alert(language === "fr" ? "Inscription réussie !" :
-                  language === "es" ? "¡Registro exitoso!" :
-                  language === "de" ? "Erfolgreich registriert!" :
-                  language === "it" ? "Registrazione riuscita!" :
-                  language === "ru" ? "Регистрация прошла успешно!" :
-                  "Registration successful!");
-            
+            else {
+                // Handle registration failure (e.g., show error message)
+                alert(language === "fr" ? "Échec de l'inscription !" :
+                      language === "es" ? "¡Registro fallido!" :
+                      language === "de" ? "Registrierung fehlgeschlagen!" :
+                      language === "it" ? "Registrazione fallita!" :
+                      language === "ru" ? "Не удалось зарегистрироваться!" :
+                      "Registration failed!");
+            }
         } catch (error) {
+            // Handle any errors that occurred during the registration request
             console.error("Error submitting form:", error);
         }
     };
 
-    // Render the login page UI
+    // Render the registration page UI
     return (
         <div>
             <Navbar />
@@ -261,10 +278,10 @@ export default function Login() {
                                                 aria-hidden="true"
                                             />
                                             <input
-                                                id="confirm-password"
-                                                name="confirm-password"
+                                                id="confirmPassword"
+                                                name="confirmPassword"
                                                 type={isPasswordVisible ? "text" : "password"}
-                                                autoComplete="current-password"
+                                                autoComplete="currentPassword"
                                                 required
                                                 placeholder={language === "fr" ? "Confirmer votre mot de passe" :
                                                 language === "es" ? "Confirmar contraseña" :
