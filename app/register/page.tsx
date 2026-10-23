@@ -84,7 +84,7 @@ export default function Register() {
             });
 
             // Check the response status to determine if the registration was successful
-            if (response.status === 200) {
+            if (response.status === 201) {
                 // Handle successful registration (e.g., redirect to login page or show success message)
                 alert(language === "fr" ? "Inscription réussie !" :
                       language === "es" ? "¡Registro exitoso!" :

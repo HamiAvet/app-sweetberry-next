@@ -5,7 +5,9 @@ import { NextResponse } from "next/server";
 import generateKey from "@/app/cli/generateKey";
 
 // import addUser function from usersDataUtils module
-import { addUser } from "@/app/lib/usersDataUtils";
+import { addUser } from "@/app/lib/userDataUtils";
+
+import { setUserSession } from "@/app/lib/sessionUtils";
 
 // Handle POST request for user registration
 export async function POST(request: Request) {
@@ -104,6 +106,11 @@ export async function POST(request: Request) {
 
             // Check if the user was successfully added to the database
             if (!(result instanceof Error)) {
+                // TESTING: Set the user session with a temporary user ID for now
+                // Set the user session upon successful registration
+                await setUserSession(data.userId);
+
+                // Return a successful registration response
                 return NextResponse.json({ message: "Registration successful" }, { status: 201 });
             }
 
