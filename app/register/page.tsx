@@ -13,7 +13,7 @@ import useLanguage from "@/app/hooks/useLanguage";
 import Navbar from "@/app/ui/navbar";
 
 // Import icons from lucide-react
-import { UserRound, Mail, Lock, MoveRight, Eye, EyeClosed } from "lucide-react";
+import { UserRound, Mail, Lock, MoveRight, Eye, EyeClosed, CircleAlert } from "lucide-react";
 
 // Registration page component
 export default function Register() {
@@ -40,7 +40,7 @@ export default function Register() {
         emailError: "",
         passwordError: "",
         confirmPasswordError: "",
-        aggregateError: ""
+        agreementError: ""
     });
 
     // Handler for updating registration errors
@@ -54,7 +54,7 @@ export default function Register() {
             emailError: "",
             passwordError: "",
             confirmPasswordError: "",
-            aggregateError: ""
+            agreementError: ""
         });
         
         try {
@@ -66,7 +66,6 @@ export default function Register() {
 
             // Convert the form data to a plain object for easier handling
             const data = Object.fromEntries(formData);
-            console.log("Form data to be sent:", data);
 
             // Convert the plain object to JSON for sending in the request body
             const JSONData = JSON.stringify(data);
@@ -83,8 +82,13 @@ export default function Register() {
                 body: JSONData
             });
 
+            const result = await response.json();
+
+            console.log("Response :", result);
+
+
             // Check the response status to determine if the registration was successful
-            if (response.status === 201) {
+            if (response.status === 201 || response.ok) {
                 // Handle successful registration (e.g., redirect to login page or show success message)
                 alert(language === "fr" ? "Inscription réussie !" :
                       language === "es" ? "¡Registro exitoso!" :
@@ -92,16 +96,18 @@ export default function Register() {
                       language === "it" ? "Registrazione riuscita!" :
                       language === "ru" ? "Регистрация прошла успешно!" :
                       "Registration successful!");
+            } else {
+                if (result.errors) {
+                    setErrors({
+                        usernameError: result.errors.usernameError || "",
+                        emailError: result.errors.emailError || "",
+                        passwordError: result.errors.passwordError || "",
+                        confirmPasswordError: result.errors.confirmPasswordError || "",
+                        agreementError: result.errors.agreementError || ""
+                    });
+                }
             }
-            else {
-                // Handle registration failure (e.g., show error message)
-                alert(language === "fr" ? "Échec de l'inscription !" :
-                      language === "es" ? "¡Registro fallido!" :
-                      language === "de" ? "Registrierung fehlgeschlagen!" :
-                      language === "it" ? "Registrazione fallita!" :
-                      language === "ru" ? "Не удалось зарегистрироваться!" :
-                      "Registration failed!");
-            }
+
         } catch (error) {
             // Handle any errors that occurred during the registration request
             console.error("Error submitting form:", error);
@@ -113,8 +119,8 @@ export default function Register() {
         <div>
             <Navbar />
             <main className="flex flex-col min-h-screen items-center justify-start bg-[#FCE9EA]">
-                <header className="flex flex-col items-center justify-center gap-8 w-full md:flex-row">
-                    <div className="flex flex-col items-center justify-center gap-4 w-full xs:w-1/2 px-4 md:pt-8 pt-24 md:h-screen">
+                <header className="flex flex-col-reverse items-center justify-center gap-8 w-full md:flex-row md:items-stretch">
+                    <div className="flex flex-col items-center justify-center gap-4 w-full xs:w-1/2 px-4 md:pt-8 pt-24 md:min-h-screen">
                         <div className="bg-[#FCE9EA] border border-[#D64C5A4C] px-8 py-4 mt-12 rounded-lg">
                             <div className="relative text-center">
                                 <h3 className="text-sm xs:text-lg xl:text-xl mb-4 font-dm-serif-display text-[#D64C5A] tracking-widest">
@@ -165,7 +171,7 @@ export default function Register() {
                                                 name="username"
                                                 type="text"
                                                 autoComplete="username"
-                                                required
+                                                //required
                                                 placeholder={language === "fr" ? "Nom d'utilisateur" :
                                                 language === "es" ? "Nombre de usuario" :
                                                 language === "de" ? "Benutzername" :
@@ -178,15 +184,21 @@ export default function Register() {
                                                 defaultValue="TestUser"
                                             />
                                         </div>
+                                        {errors.usernameError && (
+                                            <p className="mt-2 text-sm text-red-600 flex items-center gap-1">
+                                                <CircleAlert size={16} />
+                                                {errors.usernameError}
+                                            </p>
+                                        )}
                                     </div>
                                     <div className="mb-4">
                                         <label className="block text-sm font-medium text-gray-700">
-                                            {language === "fr" ? "Nom d'utilisateur" :
-                                            language === "es" ? "Nombre de usuario" :
-                                            language === "de" ? "Benutzername" :
-                                            language === "it" ? "Nome utente" :
-                                            language === "ru" ? "Имя пользователя" :
-                                            "Username"}
+                                            {language === "fr" ? "Adresse e-mail" :
+                                            language === "es" ? "Correo electrónico" :
+                                            language === "de" ? "E-Mail-Adresse" :
+                                            language === "it" ? "Indirizzo email" :
+                                            language === "ru" ? "Электронная почта" :
+                                            "Email"}
                                         </label>
                                         <div className="relative mt-1">
                                         <Mail
@@ -199,7 +211,7 @@ export default function Register() {
                                                 name="email"
                                                 type="email"
                                                 autoComplete="email"
-                                                required
+                                                //required
                                                 placeholder={language === "fr" ? "Adresse e-mail" :
                                                 language === "es" ? "Correo electrónico" :
                                                 language === "de" ? "E-Mail-Adresse" :
@@ -212,6 +224,12 @@ export default function Register() {
                                                 defaultValue="test@example.com"
                                             />
                                         </div>
+                                        {errors.emailError && (
+                                            <p className="mt-2 text-sm text-red-600 flex items-center gap-1">
+                                                <CircleAlert size={16} />
+                                                {errors.emailError}
+                                            </p>
+                                        )}
                                     </div>
                                     <div className="mb-4">
                                         <label className="block text-sm font-medium text-gray-700">
@@ -233,7 +251,7 @@ export default function Register() {
                                                 name="password"
                                                 type={isPasswordVisible ? "text" : "password"}
                                                 autoComplete="current-password"
-                                                required
+                                                //required
                                                 placeholder={language === "fr" ? "Mot de passe" :
                                                 language === "es" ? "Contraseña" :
                                                 language === "de" ? "Passwort" :
@@ -261,6 +279,12 @@ export default function Register() {
                                                 />
                                             )}
                                         </div>
+                                        {errors.passwordError && (
+                                            <p className="mt-2 text-sm text-red-600 flex items-center gap-1">
+                                                <CircleAlert size={16} />
+                                                {errors.passwordError}
+                                            </p>
+                                        )}
                                     </div>
                                     <div className="mb-4">
                                         <label className="block text-sm font-medium text-gray-700">
@@ -282,7 +306,7 @@ export default function Register() {
                                                 name="confirmPassword"
                                                 type={isPasswordVisible ? "text" : "password"}
                                                 autoComplete="currentPassword"
-                                                required
+                                                //required
                                                 placeholder={language === "fr" ? "Confirmer votre mot de passe" :
                                                 language === "es" ? "Confirmar contraseña" :
                                                 language === "it" ? "Conferma password" :
@@ -309,82 +333,88 @@ export default function Register() {
                                                 />
                                             )}
                                         </div>
+                                        {errors.confirmPasswordError && (
+                                            <p className="mt-2 text-sm text-red-600 flex items-center gap-1">
+                                                <CircleAlert size={16} />
+                                                {errors.confirmPasswordError}
+                                            </p>
+                                        )}
                                     </div>
-                                    <div className="flex items-center justify-end mb-4">
-                                        <input type="checkbox" id="agreement" name="agreement" className="mr-2 h-4 w-4 accent-[#D64C5A] cursor-pointer focus:ring-2 focus:ring-[#D64C5A]/40" />
-                                        <label htmlFor="agreement" className="text-sm font-medium text-gray-700">
+                                    <div className="mb-4 flex items-start gap-2">
+                                        <input type="checkbox" id="agreement" name="agreement" className="mt-1 h-4 w-4 shrink-0 accent-[#D64C5A] cursor-pointer focus:ring-2 focus:ring-[#D64C5A]/40" />
+                                        <label htmlFor="agreement" className="min-w-0 text-sm font-medium leading-5 text-gray-700">
                                             {language === "fr" ? (
-                                                <span className="flex gap-1 text-sm">J'accepte les 
-                                                    <div className="relative text-sm" onMouseEnter={() => setIsLink1Hovering(true)} onMouseLeave={() => setIsLink1Hovering(false)}>
-                                                        <a href="#" className="text-[#D64C5A]">conditions d'utilisation</a>
+                                                <span className="text-sm leading-5">J&apos;accepte les{" "}
+                                                    <div className="relative inline-block text-sm" onMouseEnter={() => setIsLink1Hovering(true)} onMouseLeave={() => setIsLink1Hovering(false)}>
+                                                        <a href="#" className="text-[#D64C5A]">conditions d&apos;utilisation</a>
                                                         <span className={`absolute right-0 -bottom-1 h-0.5 w-${isLink1Hovering ? 'full' : '0'} origin-right rounded-full bg-[#DE5260] transition-all duration-300 ease-in-out`}></span>
                                                     </div>
-                                                    et la 
-                                                    <div className="relative text-sm" onMouseEnter={() => setIsLink2Hovering(true)} onMouseLeave={() => setIsLink2Hovering(false)}>
+                                                    {" "}et la{" "}
+                                                    <div className="relative inline-block text-sm" onMouseEnter={() => setIsLink2Hovering(true)} onMouseLeave={() => setIsLink2Hovering(false)}>
                                                         <a href="#" className="text-[#D64C5A]">politique de confidentialité</a>
                                                         <span className={`absolute right-0 -bottom-1 h-0.5 w-${isLink2Hovering ? 'full' : '0'} origin-right rounded-full bg-[#DE5260] transition-all duration-300 ease-in-out`}></span>
                                                     </div>
                                                 </span>) :
                                             language === "es" ? (
-                                                <span className="flex gap-1 text-sm">Acepto los 
-                                                    <div className="relative text-sm" onMouseEnter={() => setIsLink1Hovering(true)} onMouseLeave={() => setIsLink1Hovering(false)}>
+                                                <span className="text-sm leading-5">Acepto los{" "}
+                                                    <div className="relative inline-block text-sm" onMouseEnter={() => setIsLink1Hovering(true)} onMouseLeave={() => setIsLink1Hovering(false)}>
                                                         <a href="#" className="text-[#D64C5A]">términos y condiciones</a>
                                                         <span className={`absolute right-0 -bottom-1 h-0.5 w-${isLink1Hovering ? 'full' : '0'} origin-right rounded-full bg-[#DE5260] transition-all duration-300 ease-in-out`}></span>
                                                     </div>
-                                                    y la 
-                                                    <div className="relative text-sm" onMouseEnter={() => setIsLink2Hovering(true)} onMouseLeave={() => setIsLink2Hovering(false)}>
+                                                    {" "}y la{" "}
+                                                    <div className="relative inline-block text-sm" onMouseEnter={() => setIsLink2Hovering(true)} onMouseLeave={() => setIsLink2Hovering(false)}>
                                                         <a href="#" className="text-[#D64C5A]">política de privacidad</a>
                                                         <span className={`absolute right-0 -bottom-1 h-0.5 w-${isLink2Hovering ? 'full' : '0'} origin-right rounded-full bg-[#DE5260] transition-all duration-300 ease-in-out`}></span>
                                                     </div>
                                                 </span>
                                             ) :
                                             language === "de" ? (
-                                                <span className="flex gap-1 text-sm">Ich akzeptiere die 
-                                                    <div className="relative text-sm" onMouseEnter={() => setIsLink1Hovering(true)} onMouseLeave={() => setIsLink1Hovering(false)}>
+                                                <span className="text-sm leading-5">Ich akzeptiere die{" "}
+                                                    <div className="relative inline-block text-sm" onMouseEnter={() => setIsLink1Hovering(true)} onMouseLeave={() => setIsLink1Hovering(false)}>
                                                         <a href="#" className="text-[#D64C5A]">Allgemeinen Geschäftsbedingungen</a>
                                                         <span className={`absolute right-0 -bottom-1 h-0.5 w-${isLink1Hovering ? 'full' : '0'} origin-right rounded-full bg-[#DE5260] transition-all duration-300 ease-in-out`}></span>
                                                     </div>
-                                                    und die 
-                                                    <div className="relative text-sm" onMouseEnter={() => setIsLink2Hovering(true)} onMouseLeave={() => setIsLink2Hovering(false)}>
+                                                    {" "}und die{" "}
+                                                    <div className="relative inline-block text-sm" onMouseEnter={() => setIsLink2Hovering(true)} onMouseLeave={() => setIsLink2Hovering(false)}>
                                                         <a href="#" className="text-[#D64C5A]">Datenschutzrichtlinie</a>
                                                         <span className={`absolute right-0 -bottom-1 h-0.5 w-${isLink2Hovering ? 'full' : '0'} origin-right rounded-full bg-[#DE5260] transition-all duration-300 ease-in-out`}></span>
                                                     </div>
                                                 </span>
                                             ) :
                                             language === "it" ? (
-                                                <span className="flex gap-1 text-sm">Accetto i 
-                                                    <div className="relative text-sm" onMouseEnter={() => setIsLink1Hovering(true)} onMouseLeave={() => setIsLink1Hovering(false)}>
+                                                <span className="text-sm leading-5">Accetto i{" "}
+                                                    <div className="relative inline-block text-sm" onMouseEnter={() => setIsLink1Hovering(true)} onMouseLeave={() => setIsLink1Hovering(false)}>
                                                         <a href="#" className="text-[#D64C5A]">termini e condizioni</a>
                                                         <span className={`absolute right-0 -bottom-1 h-0.5 w-${isLink1Hovering ? 'full' : '0'} origin-right rounded-full bg-[#DE5260] transition-all duration-300 ease-in-out`}></span>
                                                     </div>
-                                                    e la 
-                                                    <div className="relative text-sm" onMouseEnter={() => setIsLink2Hovering(true)} onMouseLeave={() => setIsLink2Hovering(false)}>
+                                                    {" "}e la{" "}
+                                                    <div className="relative inline-block text-sm" onMouseEnter={() => setIsLink2Hovering(true)} onMouseLeave={() => setIsLink2Hovering(false)}>
                                                         <a href="#" className="text-[#D64C5A]">politica sulla privacy</a>
                                                         <span className={`absolute right-0 -bottom-1 h-0.5 w-${isLink2Hovering ? 'full' : '0'} origin-right rounded-full bg-[#DE5260] transition-all duration-300 ease-in-out`}></span>
                                                     </div>
                                                 </span>
                                             ) :
                                             language === "ru" ? (
-                                                <span className="flex gap-1 text-sm">Я принимаю 
-                                                    <div className="relative text-sm" onMouseEnter={() => setIsLink1Hovering(true)} onMouseLeave={() => setIsLink1Hovering(false)}>
+                                                <span className="text-sm leading-5">Я принимаю{" "}
+                                                    <div className="relative inline-block text-sm" onMouseEnter={() => setIsLink1Hovering(true)} onMouseLeave={() => setIsLink1Hovering(false)}>
                                                         <a href="#" className="text-[#D64C5A]">условия использования</a>
                                                         <span className={`absolute right-0 -bottom-1 h-0.5 w-${isLink1Hovering ? 'full' : '0'} origin-right rounded-full bg-[#DE5260] transition-all duration-300 ease-in-out`}></span>
                                                     </div>
-                                                    и 
-                                                    <div className="relative text-sm" onMouseEnter={() => setIsLink2Hovering(true)} onMouseLeave={() => setIsLink2Hovering(false)}>
+                                                    {" "}и{" "}
+                                                    <div className="relative inline-block text-sm" onMouseEnter={() => setIsLink2Hovering(true)} onMouseLeave={() => setIsLink2Hovering(false)}>
                                                         <a href="#" className="text-[#D64C5A]">политику конфиденциальности</a>
                                                         <span className={`absolute right-0 -bottom-1 h-0.5 w-${isLink2Hovering ? 'full' : '0'} origin-right rounded-full bg-[#DE5260] transition-all duration-300 ease-in-out`}></span>
                                                     </div>
                                                 </span>
                                             ) :
                                             (
-                                                <span className="flex gap-1 text-sm">I accept the 
-                                                    <div className="relative text-sm" onMouseEnter={() => setIsLink1Hovering(true)} onMouseLeave={() => setIsLink1Hovering(false)}>
+                                                <span className="text-sm leading-5">I accept the{" "}
+                                                    <div className="relative inline-block text-sm" onMouseEnter={() => setIsLink1Hovering(true)} onMouseLeave={() => setIsLink1Hovering(false)}>
                                                         <a href="#" className="text-[#D64C5A]">terms of use</a>
                                                         <span className={`absolute right-0 -bottom-1 h-0.5 w-${isLink1Hovering ? 'full' : '0'} origin-right rounded-full bg-[#DE5260] transition-all duration-300 ease-in-out`}></span>
                                                     </div>
-                                                    and the 
-                                                    <div className="relative text-sm" onMouseEnter={() => setIsLink2Hovering(true)} onMouseLeave={() => setIsLink2Hovering(false)}>
+                                                    {" "}and the{" "}
+                                                    <div className="relative inline-block text-sm" onMouseEnter={() => setIsLink2Hovering(true)} onMouseLeave={() => setIsLink2Hovering(false)}>
                                                         <a href="#" className="text-[#D64C5A]">privacy policy</a>
                                                         <span className={`absolute right-0 -bottom-1 h-0.5 w-${isLink2Hovering ? 'full' : '0'} origin-right rounded-full bg-[#DE5260] transition-all duration-300 ease-in-out`}></span>
                                                     </div>
@@ -392,6 +422,20 @@ export default function Register() {
                                             )}
                                         </label>
                                     </div>
+                                    {errors.agreementError && (
+                                        <div
+                                            role="alert"
+                                            className="
+                                                flex items-center gap-2
+                                                border-l-2 border-[#D64C5A]
+                                                pl-3 py-1
+                                                text-sm text-[#BA3446]
+                                            "
+                                        >
+                                            <CircleAlert size={16} className="shrink-0" />
+                                            <p>{errors.agreementError}</p>
+                                        </div>
+                                    )}
                                     <div className="w-full">
                                         <button
                                             type="submit"
@@ -441,7 +485,18 @@ export default function Register() {
                             </div>
                         </div>
                     </div>
-                    <div className="md:w-3/4 md:h-screen w-full h-50 bg-[url(/images/background.png)] bg-cover bg-center"></div>
+                    <div className="relative md:w-3/4 md:h-auto w-full h-50 bg-[url(/images/background.png)] bg-cover bg-center">
+                        <div
+                            aria-hidden="true"
+                            className="
+                                pointer-events-none absolute bottom-0 left-0 h-12 w-full
+                                bg-linear-to-b from-transparent to-[#FCE9EA]
+
+                                md:inset-y-0 md:-left-px md:h-full md:w-30
+                                md:bg-linear-to-r md:from-[#FCE9EA] md:from-10% md:to-transparent
+                            "
+                        />
+                    </div>
                 </header>
             </main>
         </div>

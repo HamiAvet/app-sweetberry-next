@@ -4,5 +4,11 @@ export type RegistrationErrors = {
     emailError: string;
     passwordError: string;
     confirmPasswordError: string;
-    aggregateError: string;
+    agreementError: string;
+};
+
+// Define the structure of login errors for form validation
+export type LoginErrors = {
+    usernameError: string;
+    passwordError: string;
 };
