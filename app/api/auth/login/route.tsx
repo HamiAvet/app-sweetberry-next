@@ -53,7 +53,7 @@ export async function POST(request: Request) {
         if (error.usernameError || error.passwordError) {
             return NextResponse.json({ success: false, error }, { status: 400 });
         }
-        console.log("Login successful for user:", result.username);
+        
 
         // Return a response
         return NextResponse.json({ success: true }, { status: 200 });
