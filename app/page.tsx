@@ -19,8 +19,8 @@ export default function Home() {
     <>
       <Navbar />
       <main className="flex flex-col min-h-screen items-center justify-start bg-[#FCE9EA]">
-        <header className="flex flex-col items-center justify-center gap-8 w-full md:flex-row">
-          <div className="flex flex-col items-center justify-center gap-4 w-full xs:w-1/2 px-4 md:pt-8 pt-24 md:h-screen h-1/2">
+        <header className="flex flex-col-reverse items-center justify-center gap-8 w-full md:flex-row md:items-stretch md:gap-0">
+          <div className="flex flex-col items-center justify-center gap-4 w-full xs:w-1/2 px-4 pt-0 pb-8 md:pt-8 md:h-screen h-1/2">
             <div className="flex flex-col items-center justify-center gap-8 px-4 py-8 pt-18">
               <div className="relative align-middle text-center">
                 <h3 className="text-sm xs:text-lg xl:text-xl font-bold mb-4 font-dm-serif-display text-[#D64C5A] tracking-widest">
@@ -45,8 +45,17 @@ export default function Home() {
               <ChevronDown className="text-[#0B0001]" size={20} strokeWidth={0.75} />
             </button>
           </div>
-          <div className="md:w-3/4 md:h-screen w-full h-50 bg-[url(/images/background.png)] bg-cover bg-center">
-            
+          <div className="relative md:w-[60%] md:h-auto w-full h-80 bg-[url(/images/background.png)] bg-cover bg-center">
+            <div
+              aria-hidden="true"
+              className="
+                pointer-events-none absolute bottom-0 left-0 h-12 w-full
+                bg-linear-to-b from-transparent to-[#FCE9EA]
+
+                md:inset-y-0 md:-left-px md:h-full md:w-30
+                md:bg-linear-to-r md:from-[#FCE9EA] md:from-10% md:to-transparent
+              "
+            />
           </div>
         </header>
       </main>

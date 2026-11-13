@@ -3,6 +3,9 @@
 // Import React hooks
 import { useState } from "react";
 
+// Import types for login errors
+import type { LoginErrors } from "@/app/type/errors";
+
 // Import custom hooks
 import useLanguage from "@/app/hooks/useLanguage";
 
@@ -10,7 +13,7 @@ import useLanguage from "@/app/hooks/useLanguage";
 import Navbar from "@/app/ui/navbar";
 
 // Import icons from lucide-react
-import { UserRound, Lock, MoveRight, Eye, EyeClosed } from "lucide-react";
+import { UserRound, Lock, MoveRight, Eye, EyeClosed, CircleAlert } from "lucide-react";
 
 
 // Login page component
@@ -25,14 +28,50 @@ export default function Login() {
     // State for handling password visibility toggle
     const [isPasswordVisible, setIsPasswordVisible] = useState(false);
 
+    // State for handling form errors
+    const [errors, setErrors] = useState<LoginErrors>({
+        usernameError: "",
+        passwordError: ""
+    });
+
+    const handleFormSubmit = async (event: React.SubmitEvent) => {
+        event.preventDefault();
+
+        // Reset errors before submitting the form
+        setErrors({
+            usernameError: "",
+            passwordError: ""
+        });
+
+        // Get form data
+        const formData = new FormData(event.currentTarget as HTMLFormElement);
+        
+        // Convert form data to JSON
+        const data = Object.fromEntries(formData);
+
+        // Convert the form data object to a JSON string
+        const JSONData = JSON.stringify(data);
+
+        // Send the JSON data to the server via a POST request
+        const response = await fetch("/api/auth/login", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSONData
+        });
+
+        const result = await response.json();
+    };
+
     // Render the login page UI
     return (
         <div>
             <Navbar />
             <main className="flex flex-col min-h-screen items-center justify-start bg-[#FCE9EA]">
-                <header className="flex flex-col items-center justify-center gap-8 w-full md:flex-row">
-                    <div className="flex flex-col items-center justify-center gap-4 w-full xs:w-1/2 px-4 md:pt-8 pt-24 md:h-screen">
-                        <div className="bg-[#FCE9EA] border border-[#D64C5A4C] p-8 rounded-lg">
+                <header className="flex flex-col-reverse items-center justify-center gap-8 w-full md:flex-row md:items-stretch md:gap-0">
+                    <div className="flex flex-col items-center justify-center gap-4 w-full min-w-0 md:w-[45%] px-4 pt-0 pb-8 md:pt-28 md:min-h-screen">
+                        <div className="w-full max-w-xl bg-[#FCE9EA] border border-[#D64C5A4C] px-8 py-4 rounded-lg">
                             <div className="relative text-center">
                                 <h3 className="text-sm xs:text-lg xl:text-xl mb-4 font-dm-serif-display text-[#D64C5A] tracking-widest">
                                     {language === "fr" ? "Bienvenue à nouveau chez Sweetberry" :
@@ -61,7 +100,7 @@ export default function Login() {
                                 </p>
                             </div>
                             <div className="mt-8">
-                                <form className="space-y-6">
+                                <form className="space-y-6" onSubmit={handleFormSubmit}>
                                     <div className="mb-4">
                                         <label className="block text-sm font-medium text-gray-700">
                                             {language === "fr" ? "Nom d'utilisateur" :
@@ -89,11 +128,13 @@ export default function Login() {
                                                 language === "it" ? "Nome utente" :
                                                 language === "ru" ? "Имя пользователя" :
                                                 "Username"}
-                                                className="bg-[#FEF5F5] block w-full rounded-lg border-2 border-[#D64C5A55] py-2 pl-10 pr-4 focus:border-[#d64c5aa1] focus:outline-none transition duration-200"
+                                                className="bg-[#FEF5F5] block w-full rounded-lg border-2 border-[#D64C5A55] py-2 pl-10 pr-6 focus:border-[#d64c5aa1] focus:outline-none transition duration-200"
                                             />
                                         </div>
                                     </div>
-
+                                    {/* ADD THE ERROR MESSAGE HERE */}
+                                    
+                                    
                                     <div className="mb-4">
                                         <label className="block text-sm font-medium text-gray-700">
                                             {language === "fr" ? "Mot de passe" :
@@ -121,7 +162,7 @@ export default function Login() {
                                                 language === "it" ? "Password" :
                                                 language === "ru" ? "Пароль" :
                                                 "Password"}
-                                                className="bg-[#FEF5F5] block w-full rounded-lg border-2 border-[#D64C5A55] py-2 pl-10 pr-4 focus:border-[#d64c5aa1] focus:outline-none transition duration-300 ease-in-out"
+                                                className="bg-[#FEF5F5] block w-full rounded-lg border-2 border-[#D64C5A55] py-2 pl-10 pr-12 focus:border-[#d64c5aa1] focus:outline-none transition duration-300 ease-in-out"
                                             />
                                             {!isPasswordVisible ? (
                                                 <Eye
@@ -139,6 +180,7 @@ export default function Login() {
                                                 />
                                             )}
                                         </div>
+                                        {/* ADD THE ERROR MESSAGE HERE */}
                                     </div>
                                     <div className="flex items-center justify-end mb-4">
                                         <div className="relative text-sm" onMouseEnter={() => setIsLinkHovering(true)} onMouseLeave={() => setIsLinkHovering(false)}>
@@ -153,6 +195,7 @@ export default function Login() {
                                             <span className={`absolute right-0 -bottom-1 h-0.5 w-${isLinkHovering ? 'full' : '0'} origin-right rounded-full bg-[#DE5260] transition-all duration-300 ease-in-out`}></span>
                                         </div>
                                     </div>
+                                    {/* MAY ADD A "REMEMBER ME" CHECKBOX HERE */}
                                     <div className="w-full">
                                         <button
                                             type="submit"
@@ -167,7 +210,7 @@ export default function Login() {
                                                 language === "ru" ? "Войти" :
                                                 "Sign In"}
                                             </p>
-                                            <MoveRight className={`absolute right-5 top-1/2 transform -translate-y-1/2 text-white transition duration-300 ease-in-out ${isButtonHovering ? 'translate-x-2' : ''}`} />
+                                            <MoveRight className={`absolute hidden min-[290px]:inline right-5 top-1/2 transform -translate-y-1/2 text-white transition duration-300 ease-in-out ${isButtonHovering ? 'translate-x-2' : ''}`} />
                                         </button>
                                     </div>
                                 </form>
@@ -197,7 +240,18 @@ export default function Login() {
                             </div>
                         </div>
                     </div>
-                    <div className="md:w-3/4 md:h-screen w-full h-50 bg-[url(/images/background.png)] bg-cover bg-center"></div>
+                    <div className="relative md:w-[55%] md:h-auto w-full h-80 bg-[url(/images/background.png)] bg-cover bg-center">
+                        <div
+                            aria-hidden="true"
+                            className="
+                                pointer-events-none absolute bottom-0 left-0 h-12 w-full
+                                bg-linear-to-b from-transparent to-[#FCE9EA]
+
+                                md:inset-y-0 md:-left-px md:h-full md:w-30
+                                md:bg-linear-to-r md:from-[#FCE9EA] md:from-10% md:to-transparent
+                            "
+                        />
+                    </div>
                 </header>
             </main>
         </div>

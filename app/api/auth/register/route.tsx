@@ -7,6 +7,7 @@ import generateKey from "@/app/cli/generateKey";
 // import addUser function from usersDataUtils module
 import { addUser } from "@/app/lib/userDataUtils";
 
+// Import setUserSession function from sessionUtils module
 import { setUserSession } from "@/app/lib/sessionUtils";
 
 // Handle POST request for user registration
@@ -14,8 +15,7 @@ export async function POST(request: Request) {
     try {
         // Parse the incoming JSON data from the request body
         const data = await request.json();
-        console.log(data);
-
+        
         // Initialize an error object to store validation errors for each field
         const errors = {
             usernameError: "",
@@ -133,53 +133,6 @@ export async function POST(request: Request) {
                                         language === "ru" ? "Пароли не совпадают" :
                                         "Passwords do not match";
         }
-
-        /*
-        // Verify that there are no validation errors before attempting to register the user
-        if (!errors.usernameError && !errors.emailError && !errors.passwordError && !errors.confirmPasswordError && !errors.agreementError) {
-            // The id generation and this validation may be replaced with a more robust mechanism 
-            // or with auto-incrementing IDs in the future.
-
-            // Attempt to register the user up to 3 times with a unique user ID
-            for (let attemptCount = 0; attemptCount < 3; attemptCount++) {
-                // Generate a unique user ID for this registration attempt
-                data.userId = generateKey();
-
-                // Attempt to add the user to the database with the generated user ID
-                const result = await addUser(data);
-
-                // Check if the user was successfully added to the database
-                if (!(result instanceof Error)) {
-                    // TESTING: Set the user session with a temporary user ID for now
-                    // Set the user session upon successful registration
-                    await setUserSession(data.userId);
-
-                    // Return a successful registration response
-                    return NextResponse.json({ message: "Registration successful" }, { status: 201 });
-                }
-
-                // Handle specific database errors related to unique constraints
-                if (result.message.includes("users_username_key")) {
-                    errors.usernameError = "Username already taken";
-                    return NextResponse.json({ message: "Registration failed", errors: errors }, { status: 400 });
-                }
-
-                // Handle specific database errors related to unique constraints for the email field
-                if (result.message.includes("users_email_key")) {
-                    errors.emailError = "Email already in use";
-                    return NextResponse.json({ message: "Registration failed", errors: errors }, { status: 400 });
-                }
-
-                // If the error is not related to the primary key constraint, return a generic database error
-                if (!result.message.includes("users_pkey")) {
-                    return NextResponse.json({ message: "Registration failed", errors: { agreementError: "Database error" } }, { status: 500 });
-                }
-            }
-        } else {
-            // Return a 400 response with the error messages if validation fails
-            //return NextResponse.json({ message: "Registration failed", errors: errors }, { status: 400 });
-        }*/
-
         
         // If there are any validation errors, return a 400 response with the error messages
         if (errors.usernameError || errors.emailError || errors.passwordError || errors.confirmPasswordError || errors.agreementError) {
@@ -211,33 +164,39 @@ export async function POST(request: Request) {
 
             // Handle specific database errors related to unique constraints
             if (result.message.includes("users_username_key")) {
+                // Set the appropriate error message for the username conflict based on the user's language preference
                 errors.usernameError = language === "fr" ? "Nom d'utilisateur déjà pris" :
                                         language === "es" ? "Nombre de usuario ya en uso" :
                                         language === "de" ? "Benutzername bereits vergeben" :
                                         language === "it" ? "Nome utente già in uso" :
                                         language === "ru" ? "Имя пользователя уже занято" :
                                         "Username already taken";
+
+                // Return a response indicating the registration failed due to a username conflict
                 return NextResponse.json({ message: "Registration failed", errors: errors }, { status: 400 });
             }
 
             // Handle specific database errors related to unique constraints for the email field
             if (result.message.includes("users_email_key")) {
+                // Set the appropriate error message for the email conflict based on the user's language preference
                 errors.emailError = language === "fr" ? "Email déjà utilisé" :
                                     language === "es" ? "Correo electrónico ya en uso" :
                                     language === "de" ? "E-Mail bereits verwendet" :
                                     language === "it" ? "Email già in uso" :
                                     language === "ru" ? "Электронная почта уже используется" :
                                     "Email already in use";
+                // Return a response indicating the registration failed due to an email conflict
                 return NextResponse.json({ message: "Registration failed", errors: errors }, { status: 400 });
             }
 
             // If the error is not related to the primary key constraint, return a generic database error
             if (!result.message.includes("users_pkey")) {
+                // Return a generic database error if the error is not related to the primary key constraint
                 return NextResponse.json({ message: "Registration failed", errors: { aggregateError: "Database error" } }, { status: 500 });
             }
         }
 
-        // Return a generic error response if all attempts to register the user fail
+        // Return a generic error response if all attempts to register the user fail due to inability to generate a unique user ID
         return NextResponse.json({ message: "Registration failed", errors: { aggregateError: "Unable to generate a unique user ID" } }, { status: 500 });
     } catch (error) {
         // Return a 500 response if an unexpected error occurs during registration

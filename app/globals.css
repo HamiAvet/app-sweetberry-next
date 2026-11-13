@@ -8,8 +8,8 @@
 }
 
 @theme {
-  --breakpoint-xs: 25rem;
-  --breakpoint-lmd: 53rem;
+  --breakpoint-xs: 25rem; /* 400px */
+  --breakpoint-lmd: 53rem; /* 848px */
 }
 
 /* Default styles for light and dark mode

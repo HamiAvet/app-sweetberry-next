@@ -36,3 +36,14 @@ export const addUser = async (user: User) => {
     return error;
   }
 };
+
+export const getUserByUsername = async (username: string) => {
+  try {
+    const user = await sql`
+      SELECT * FROM users WHERE username = ${username}
+    `;
+    return user[0];
+  } catch (error) {
+    return error;
+  }
+};

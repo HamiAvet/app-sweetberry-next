@@ -48,6 +48,8 @@ export default function Register() {
         // Prevent the default form submission behavior
         event.preventDefault();
 
+        // Optionally, you can set a loading state here to indicate that the form is being submitted
+
         // Clear previous errors before submitting the form
         setErrors({
             usernameError: "",
@@ -82,10 +84,8 @@ export default function Register() {
                 body: JSONData
             });
 
+            // Parse the JSON response from the server
             const result = await response.json();
-
-            console.log("Response :", result);
-
 
             // Check the response status to determine if the registration was successful
             if (response.status === 201 || response.ok) {
@@ -97,7 +97,9 @@ export default function Register() {
                       language === "ru" ? "Регистрация прошла успешно!" :
                       "Registration successful!");
             } else {
+                // Handle registration errors (e.g., display error messages to the user)
                 if (result.errors) {
+                    // If there are errors in the response, update the state with the error messages so they can be displayed to the user
                     setErrors({
                         usernameError: result.errors.usernameError || "",
                         emailError: result.errors.emailError || "",
@@ -107,7 +109,6 @@ export default function Register() {
                     });
                 }
             }
-
         } catch (error) {
             // Handle any errors that occurred during the registration request
             console.error("Error submitting form:", error);
@@ -119,9 +120,9 @@ export default function Register() {
         <div>
             <Navbar />
             <main className="flex flex-col min-h-screen items-center justify-start bg-[#FCE9EA]">
-                <header className="flex flex-col-reverse items-center justify-center gap-8 w-full md:flex-row md:items-stretch">
-                    <div className="flex flex-col items-center justify-center gap-4 w-full xs:w-1/2 px-4 md:pt-8 pt-24 md:min-h-screen">
-                        <div className="bg-[#FCE9EA] border border-[#D64C5A4C] px-8 py-4 mt-12 rounded-lg">
+                <header className="flex flex-col-reverse items-center justify-center gap-8 w-full md:flex-row md:items-stretch md:gap-0">
+                    <div className="flex flex-col items-center justify-center gap-4 w-full min-w-0 md:w-[45%] px-4 pt-0 pb-8 md:pt-28 md:min-h-screen">
+                        <div className="w-full max-w-xl bg-[#FCE9EA] border border-[#D64C5A4C] px-8 py-4 rounded-lg">
                             <div className="relative text-center">
                                 <h3 className="text-sm xs:text-lg xl:text-xl mb-4 font-dm-serif-display text-[#D64C5A] tracking-widest">
                                     {language === "fr" ? "Rejoignez Sweetberry" :
@@ -171,14 +172,13 @@ export default function Register() {
                                                 name="username"
                                                 type="text"
                                                 autoComplete="username"
-                                                //required
                                                 placeholder={language === "fr" ? "Nom d'utilisateur" :
                                                 language === "es" ? "Nombre de usuario" :
                                                 language === "de" ? "Benutzername" :
                                                 language === "it" ? "Nome utente" :
                                                 language === "ru" ? "Имя пользователя" :
                                                 "Username"}
-                                                className="bg-[#FEF5F5] block w-full rounded-lg border-2 border-[#D64C5A55] py-2 pl-10 pr-4 focus:border-[#d64c5aa1] focus:outline-none transition duration-200"
+                                                className={`bg-[#FEF5F5] block w-full rounded-lg border-2 border-[#D64C5A55] ${errors.usernameError ? 'border-red-600' : ''} py-2 pl-10 pr-4 focus:border-[#d64c5aa1] focus:outline-none transition duration-200`}
                                             
                                                 /* Default value for testing purposes */
                                                 defaultValue="TestUser"
@@ -209,16 +209,15 @@ export default function Register() {
                                             <input
                                                 id="email"
                                                 name="email"
-                                                type="email"
+                                                type="text"
                                                 autoComplete="email"
-                                                //required
                                                 placeholder={language === "fr" ? "Adresse e-mail" :
                                                 language === "es" ? "Correo electrónico" :
                                                 language === "de" ? "E-Mail-Adresse" :
                                                 language === "it" ? "Indirizzo email" :
                                                 language === "ru" ? "Электронная почта" :
                                                 "Email"}
-                                                className="bg-[#FEF5F5] block w-full rounded-lg border-2 border-[#D64C5A55] py-2 pl-10 pr-4 focus:border-[#d64c5aa1] focus:outline-none transition duration-200"
+                                                className={`bg-[#FEF5F5] block w-full rounded-lg border-2 border-[#D64C5A55] ${errors.emailError ? 'border-red-600' : ''} py-2 pl-10 pr-4 focus:border-[#d64c5aa1] focus:outline-none transition duration-200`}
                                             
                                                 /* Default value for testing purposes */
                                                 defaultValue="test@example.com"
@@ -251,28 +250,28 @@ export default function Register() {
                                                 name="password"
                                                 type={isPasswordVisible ? "text" : "password"}
                                                 autoComplete="current-password"
-                                                //required
+
                                                 placeholder={language === "fr" ? "Mot de passe" :
                                                 language === "es" ? "Contraseña" :
                                                 language === "de" ? "Passwort" :
                                                 language === "it" ? "Password" :
                                                 language === "ru" ? "Пароль" :
                                                 "Password"}
-                                                className="bg-[#FEF5F5] block w-full rounded-lg border-2 border-[#D64C5A55] py-2 pl-10 pr-4 focus:border-[#d64c5aa1] focus:outline-none transition duration-300 ease-in-out"
+                                                className={`bg-[#FEF5F5] block w-full rounded-lg border-2 border-[#D64C5A55] ${errors.passwordError ? 'border-red-600' : ''} py-2 pl-10 pr-12 focus:border-[#d64c5aa1] focus:outline-none transition duration-300 ease-in-out`}
                                             
                                                 /* Default value for testing purposes */
-                                                defaultValue="TestPassword"
+                                                defaultValue="TestPassword-123"
                                             />
                                             {!isPasswordVisible ? (
                                                 <Eye
-                                                    className="cursor-pointer absolute right-3 top-1/2 -translate-y-1/2 text-text-gray-700"
+                                                    className="cursor-pointer absolute right-3 top-1/2 -translate-y-1/2 text-text-gray-700 bg-[#FEF5F5]"
                                                     size={22}
                                                     aria-hidden="true"
                                                     onClick={() => setIsPasswordVisible(true)}
                                                 />
                                             ) : (
                                                 <EyeClosed
-                                                    className="cursor-pointer absolute right-3 top-[calc(50%+2px)] -translate-y-1/2 text-text-gray-700"
+                                                    className="cursor-pointer absolute right-3 top-[calc(50%+2px)] -translate-y-1/2 text-text-gray-700 bg-[#FEF5F5]"
                                                     size={22}
                                                     aria-hidden="true"
                                                     onClick={() => setIsPasswordVisible(false)}
@@ -306,27 +305,27 @@ export default function Register() {
                                                 name="confirmPassword"
                                                 type={isPasswordVisible ? "text" : "password"}
                                                 autoComplete="currentPassword"
-                                                //required
+
                                                 placeholder={language === "fr" ? "Confirmer votre mot de passe" :
                                                 language === "es" ? "Confirmar contraseña" :
                                                 language === "it" ? "Conferma password" :
                                                 language === "ru" ? "Подтвердите пароль" :
                                                 "Confirm Password"}
-                                                className="bg-[#FEF5F5] block w-full rounded-lg border-2 border-[#D64C5A55] py-2 pl-10 pr-4 focus:border-[#d64c5aa1] focus:outline-none transition duration-300 ease-in-out"
-                                            
+                                                onInput={() => setErrors(prev => ({ ...prev, confirmPasswordError: '' }))}
+                                                className={`bg-[#FEF5F5] block w-full rounded-lg border-2 border-[#D64C5A55] ${errors.confirmPasswordError ? 'border-red-600' : ''} py-2 pl-10 pr-12 focus:border-[#d64c5aa1] focus:outline-none transition duration-300 ease-in-out`}
                                                 /* Default value for testing purposes */
-                                                defaultValue="TestPassword"
+                                                defaultValue="TestPassword-123"
                                             />
                                             {!isConfirmPasswordVisible ? (
                                                 <Eye
-                                                    className="cursor-pointer absolute right-3 top-1/2 -translate-y-1/2 text-text-gray-700"
+                                                    className="cursor-pointer absolute right-3 top-1/2 -translate-y-1/2 text-text-gray-700 bg-[#FEF5F5]"
                                                     size={22}
                                                     aria-hidden="true"
                                                     onClick={() => setIsConfirmPasswordVisible(true)}
                                                 />
                                             ) : (
                                                 <EyeClosed
-                                                    className="cursor-pointer absolute right-3 top-[calc(50%+2px)] -translate-y-1/2 text-text-gray-700"
+                                                    className="cursor-pointer absolute right-3 top-[calc(50%+2px)] -translate-y-1/2 text-text-gray-700 bg-[#FEF5F5]"
                                                     size={22}
                                                     aria-hidden="true"
                                                     onClick={() => setIsConfirmPasswordVisible(false)}
@@ -341,29 +340,29 @@ export default function Register() {
                                         )}
                                     </div>
                                     <div className="mb-4 flex items-start gap-2">
-                                        <input type="checkbox" id="agreement" name="agreement" className="mt-1 h-4 w-4 shrink-0 accent-[#D64C5A] cursor-pointer focus:ring-2 focus:ring-[#D64C5A]/40" />
+                                        <input type="checkbox" id="agreement" name="agreement" onInput={() => setErrors(prev => ({ ...prev, agreementError: '' }))} className={`mt-1 h-4 w-4 shrink-0 accent-[#D64C5A] ${errors.agreementError ? "outline-2 outline-red-600 outline-offset-2" : ""} cursor-pointer focus:ring-2 focus:ring-[#D64C5A]/40`} />
                                         <label htmlFor="agreement" className="min-w-0 text-sm font-medium leading-5 text-gray-700">
                                             {language === "fr" ? (
                                                 <span className="text-sm leading-5">J&apos;accepte les{" "}
                                                     <div className="relative inline-block text-sm" onMouseEnter={() => setIsLink1Hovering(true)} onMouseLeave={() => setIsLink1Hovering(false)}>
-                                                        <a href="#" className="text-[#D64C5A]">conditions d&apos;utilisation</a>
+                                                        <a href="#" className="text-[#DE5260]">conditions d&apos;utilisation</a>
                                                         <span className={`absolute right-0 -bottom-1 h-0.5 w-${isLink1Hovering ? 'full' : '0'} origin-right rounded-full bg-[#DE5260] transition-all duration-300 ease-in-out`}></span>
                                                     </div>
                                                     {" "}et la{" "}
                                                     <div className="relative inline-block text-sm" onMouseEnter={() => setIsLink2Hovering(true)} onMouseLeave={() => setIsLink2Hovering(false)}>
-                                                        <a href="#" className="text-[#D64C5A]">politique de confidentialité</a>
+                                                        <a href="#" className="text-[#DE5260]">politique de confidentialité</a>
                                                         <span className={`absolute right-0 -bottom-1 h-0.5 w-${isLink2Hovering ? 'full' : '0'} origin-right rounded-full bg-[#DE5260] transition-all duration-300 ease-in-out`}></span>
                                                     </div>
                                                 </span>) :
                                             language === "es" ? (
                                                 <span className="text-sm leading-5">Acepto los{" "}
                                                     <div className="relative inline-block text-sm" onMouseEnter={() => setIsLink1Hovering(true)} onMouseLeave={() => setIsLink1Hovering(false)}>
-                                                        <a href="#" className="text-[#D64C5A]">términos y condiciones</a>
+                                                        <a href="#" className="text-[#DE5260]">términos y condiciones</a>
                                                         <span className={`absolute right-0 -bottom-1 h-0.5 w-${isLink1Hovering ? 'full' : '0'} origin-right rounded-full bg-[#DE5260] transition-all duration-300 ease-in-out`}></span>
                                                     </div>
                                                     {" "}y la{" "}
                                                     <div className="relative inline-block text-sm" onMouseEnter={() => setIsLink2Hovering(true)} onMouseLeave={() => setIsLink2Hovering(false)}>
-                                                        <a href="#" className="text-[#D64C5A]">política de privacidad</a>
+                                                        <a href="#" className="text-[#DE5260]">política de privacidad</a>
                                                         <span className={`absolute right-0 -bottom-1 h-0.5 w-${isLink2Hovering ? 'full' : '0'} origin-right rounded-full bg-[#DE5260] transition-all duration-300 ease-in-out`}></span>
                                                     </div>
                                                 </span>
@@ -371,12 +370,12 @@ export default function Register() {
                                             language === "de" ? (
                                                 <span className="text-sm leading-5">Ich akzeptiere die{" "}
                                                     <div className="relative inline-block text-sm" onMouseEnter={() => setIsLink1Hovering(true)} onMouseLeave={() => setIsLink1Hovering(false)}>
-                                                        <a href="#" className="text-[#D64C5A]">Allgemeinen Geschäftsbedingungen</a>
+                                                        <a href="#" className="text-[#DE5260]">Allgemeinen Geschäftsbedingungen</a>
                                                         <span className={`absolute right-0 -bottom-1 h-0.5 w-${isLink1Hovering ? 'full' : '0'} origin-right rounded-full bg-[#DE5260] transition-all duration-300 ease-in-out`}></span>
                                                     </div>
                                                     {" "}und die{" "}
                                                     <div className="relative inline-block text-sm" onMouseEnter={() => setIsLink2Hovering(true)} onMouseLeave={() => setIsLink2Hovering(false)}>
-                                                        <a href="#" className="text-[#D64C5A]">Datenschutzrichtlinie</a>
+                                                        <a href="#" className="text-[#DE5260]">Datenschutzrichtlinie</a>
                                                         <span className={`absolute right-0 -bottom-1 h-0.5 w-${isLink2Hovering ? 'full' : '0'} origin-right rounded-full bg-[#DE5260] transition-all duration-300 ease-in-out`}></span>
                                                     </div>
                                                 </span>
@@ -384,12 +383,12 @@ export default function Register() {
                                             language === "it" ? (
                                                 <span className="text-sm leading-5">Accetto i{" "}
                                                     <div className="relative inline-block text-sm" onMouseEnter={() => setIsLink1Hovering(true)} onMouseLeave={() => setIsLink1Hovering(false)}>
-                                                        <a href="#" className="text-[#D64C5A]">termini e condizioni</a>
+                                                        <a href="#" className="text-[#DE5260]">termini e condizioni</a>
                                                         <span className={`absolute right-0 -bottom-1 h-0.5 w-${isLink1Hovering ? 'full' : '0'} origin-right rounded-full bg-[#DE5260] transition-all duration-300 ease-in-out`}></span>
                                                     </div>
                                                     {" "}e la{" "}
                                                     <div className="relative inline-block text-sm" onMouseEnter={() => setIsLink2Hovering(true)} onMouseLeave={() => setIsLink2Hovering(false)}>
-                                                        <a href="#" className="text-[#D64C5A]">politica sulla privacy</a>
+                                                        <a href="#" className="text-[#DE5260]">politica sulla privacy</a>
                                                         <span className={`absolute right-0 -bottom-1 h-0.5 w-${isLink2Hovering ? 'full' : '0'} origin-right rounded-full bg-[#DE5260] transition-all duration-300 ease-in-out`}></span>
                                                     </div>
                                                 </span>
@@ -397,12 +396,12 @@ export default function Register() {
                                             language === "ru" ? (
                                                 <span className="text-sm leading-5">Я принимаю{" "}
                                                     <div className="relative inline-block text-sm" onMouseEnter={() => setIsLink1Hovering(true)} onMouseLeave={() => setIsLink1Hovering(false)}>
-                                                        <a href="#" className="text-[#D64C5A]">условия использования</a>
+                                                        <a href="#" className="text-[#DE5260]">условия использования</a>
                                                         <span className={`absolute right-0 -bottom-1 h-0.5 w-${isLink1Hovering ? 'full' : '0'} origin-right rounded-full bg-[#DE5260] transition-all duration-300 ease-in-out`}></span>
                                                     </div>
                                                     {" "}и{" "}
                                                     <div className="relative inline-block text-sm" onMouseEnter={() => setIsLink2Hovering(true)} onMouseLeave={() => setIsLink2Hovering(false)}>
-                                                        <a href="#" className="text-[#D64C5A]">политику конфиденциальности</a>
+                                                        <a href="#" className="text-[#DE5260]">политику конфиденциальности</a>
                                                         <span className={`absolute right-0 -bottom-1 h-0.5 w-${isLink2Hovering ? 'full' : '0'} origin-right rounded-full bg-[#DE5260] transition-all duration-300 ease-in-out`}></span>
                                                     </div>
                                                 </span>
@@ -410,12 +409,12 @@ export default function Register() {
                                             (
                                                 <span className="text-sm leading-5">I accept the{" "}
                                                     <div className="relative inline-block text-sm" onMouseEnter={() => setIsLink1Hovering(true)} onMouseLeave={() => setIsLink1Hovering(false)}>
-                                                        <a href="#" className="text-[#D64C5A]">terms of use</a>
+                                                        <a href="#" className="text-[#DE5260]">terms of use</a>
                                                         <span className={`absolute right-0 -bottom-1 h-0.5 w-${isLink1Hovering ? 'full' : '0'} origin-right rounded-full bg-[#DE5260] transition-all duration-300 ease-in-out`}></span>
                                                     </div>
                                                     {" "}and the{" "}
                                                     <div className="relative inline-block text-sm" onMouseEnter={() => setIsLink2Hovering(true)} onMouseLeave={() => setIsLink2Hovering(false)}>
-                                                        <a href="#" className="text-[#D64C5A]">privacy policy</a>
+                                                        <a href="#" className="text-[#DE5260]">privacy policy</a>
                                                         <span className={`absolute right-0 -bottom-1 h-0.5 w-${isLink2Hovering ? 'full' : '0'} origin-right rounded-full bg-[#DE5260] transition-all duration-300 ease-in-out`}></span>
                                                     </div>
                                                 </span>
@@ -427,9 +426,9 @@ export default function Register() {
                                             role="alert"
                                             className="
                                                 flex items-center gap-2
-                                                border-l-2 border-[#D64C5A]
+                                                border-l-2 border-red-600
                                                 pl-3 py-1
-                                                text-sm text-[#BA3446]
+                                                text-sm text-red-600
                                             "
                                         >
                                             <CircleAlert size={16} className="shrink-0" />
@@ -450,7 +449,7 @@ export default function Register() {
                                                 language === "ru" ? "Зарегистрироваться" :
                                                 "Sign Up"}
                                             </p>
-                                            <MoveRight className={`absolute right-5 top-1/2 transform -translate-y-1/2 text-white transition duration-300 ease-in-out ${isButtonHovering ? 'translate-x-2' : ''}`} />
+                                            <MoveRight className={`absolute hidden min-[290px]:inline right-5 top-1/2 transform -translate-y-1/2 text-white transition duration-300 ease-in-out ${isButtonHovering ? 'translate-x-2' : ''}`} />
                                         </button>
                                     </div>
                                 </form>
@@ -460,7 +459,7 @@ export default function Register() {
                                         <p className="flex items-center justify-center text-sm text-[#b09393cf] w-[10%] h-px">ou</p>
                                         <span className="text-sm bg-[#ac9999ed] h-px w-[45%]"></span>
                                     </div>
-                                    <div className="w-full flex justify-center gap-1 mb-4">
+                                    <div className="w-full flex justify-center flex-col items-center xs:flex-row md:flex-col min-[55.0625rem]:flex-row gap-1 mb-4">
                                         <p className="text-md text-[#0B0001] text-center">
                                             {language === "fr" ? "Vous avez déjà un compte ?" :
                                             language === "es" ? "¿Ya tienes una cuenta?" :
@@ -469,7 +468,7 @@ export default function Register() {
                                             language === "ru" ? "У вас уже есть аккаунт?" :
                                             "Already have an account?"}
                                         </p>
-                                        <div className="relative" onMouseEnter={() => setIsLink3Hovering(true)} onMouseLeave={() => setIsLink3Hovering(false)}>
+                                        <div className="relative w-fit" onMouseEnter={() => setIsLink3Hovering(true)} onMouseLeave={() => setIsLink3Hovering(false)}>
                                             <a href="/login" className="text-[#D64C5A] text-md font-medium cursor-pointer transition-all duration-300 ease-in-out">
                                                 {language === "fr" ? "Se connecter" :
                                                 language === "es" ? "Iniciar sesión" :
@@ -485,7 +484,7 @@ export default function Register() {
                             </div>
                         </div>
                     </div>
-                    <div className="relative md:w-3/4 md:h-auto w-full h-50 bg-[url(/images/background.png)] bg-cover bg-center">
+                    <div className="relative md:w-[55%] md:h-auto w-full h-80 bg-[url(/images/background.png)] bg-cover bg-center">
                         <div
                             aria-hidden="true"
                             className="
